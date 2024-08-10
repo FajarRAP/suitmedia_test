@@ -31,7 +31,6 @@ class MyTextField extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
       ),
-      onChanged: (value) => print(value),
     );
   }
 }

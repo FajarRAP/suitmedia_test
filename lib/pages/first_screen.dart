@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:suitmedia_test/cubit/user_cubit.dart';
 import 'package:suitmedia_test/pages/second_screen.dart';
 import 'package:suitmedia_test/pages/widgets/button_styled.dart';
 import 'package:suitmedia_test/pages/widgets/my_text_field.dart';
@@ -16,6 +18,8 @@ class _FirstScreenState extends State<FirstScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userCubit = context.read<UserCubit>();
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(32),
@@ -49,8 +53,6 @@ class _FirstScreenState extends State<FirstScreen> {
             ButtonStyled(
               text: 'CHECK',
               onPressed: () {
-                setState(() {});
-                print(palindromeController.text);
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
@@ -72,10 +74,13 @@ class _FirstScreenState extends State<FirstScreen> {
             const SizedBox(height: 15),
             ButtonStyled(
               text: 'NEXT',
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SecondScreen()),
-              ),
+              onPressed: () {
+                userCubit.name = nameController.text;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SecondScreen()),
+                );
+              },
             ),
           ],
         ),

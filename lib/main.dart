@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:suitmedia_test/cubit/user_cubit.dart';
+import 'package:suitmedia_test/data/repositories/user_repositories.dart';
 import 'package:suitmedia_test/pages/first_screen.dart';
 
 void main() {
@@ -10,9 +13,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
+    return BlocProvider<UserCubit>(
+      create: (context) => UserCubit(userRepositories: UserRepositories()),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
           appBarTheme: const AppBarTheme(
@@ -26,8 +31,9 @@ class MyApp extends StatelessWidget {
             ),
             centerTitle: true,
           ),
-          ),
-      home: const FirstScreen(),
+        ),
+        home: const FirstScreen(),
+      ),
     );
   }
 }

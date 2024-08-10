@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:suitmedia_test/cubit/user_cubit.dart';
 import 'package:suitmedia_test/pages/third_screen.dart';
 import 'package:suitmedia_test/pages/widgets/button_styled.dart';
 
@@ -9,9 +11,9 @@ class SecondScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userCubit = context.read<UserCubit>();
     return Scaffold(
       appBar: AppBar(
-
         title: const Text('Second Screen'),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -29,22 +31,26 @@ class SecondScreen extends StatelessWidget {
                 fontSize: 12,
               ),
             ),
-            const Text(
-              'John Doe',
-              style: TextStyle(
+            Text(
+              userCubit.name,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
             ),
             const Spacer(),
-            const Align(
+            Align(
               alignment: Alignment.center,
-              child: Text(
-                'Selected User Name',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                ),
+              child: BlocBuilder<UserCubit, UserState>(
+                builder: (context, state) {
+                  return Text(
+                    userCubit.username,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                },
               ),
             ),
             const Spacer(),
