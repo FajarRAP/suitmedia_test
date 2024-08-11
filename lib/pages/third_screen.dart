@@ -5,7 +5,9 @@ import 'package:suitmedia_test/pages/widgets/button_styled.dart';
 import 'package:suitmedia_test/pages/widgets/item_user.dart';
 
 class ThirdScreen extends StatelessWidget {
-  const ThirdScreen({super.key});
+  const ThirdScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,10 @@ class ThirdScreen extends StatelessWidget {
           if (state is UserLoaded) {
             return RefreshIndicator(
               displacement: 10,
-              onRefresh: () async => userCubit.getUsers(),
+              onRefresh: () async {
+                userCubit.reset();
+                userCubit.getUsers();
+              },
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -37,10 +42,28 @@ class ThirdScreen extends StatelessWidget {
                   if (index < userCubit.users.length) {
                     return ItemUser(user: userCubit.users[index]);
                   } else {
+                    if (state is NoMoreUser) {
+                      return const Center(
+                        child: Text(
+                          'No Data Available',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (state is MoreUserLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
                     return ButtonStyled(
                       text: 'Load More',
                       onPressed: () {
-                        ++userCubit.page;
+                        userCubit.nextPage();
                         userCubit.getUsers();
                       },
                     );
@@ -51,19 +74,12 @@ class ThirdScreen extends StatelessWidget {
             );
           }
           if (state is UserEmpty) {
-            return Center(
-              child: TextButton(
-                onPressed: () {
-                  userCubit.page = 1;
-                  userCubit.users.clear();
-                  userCubit.getUsers();
-                },
-                child: const Text(
-                  'No Data Available',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
+            return const Center(
+              child: Text(
+                'No Data Available',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             );

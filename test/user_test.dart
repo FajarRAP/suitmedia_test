@@ -1,11 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:suitmedia_test/data/models/user_model.dart';
-
-import 'package:suitmedia_test/main.dart';
 
 void main() {
   test(

@@ -19,12 +19,18 @@ class UserCubit extends Cubit<UserState> {
   int numContent = 5;
 
   Future<void> getUsers() async {
-    emit(UserLoading());
+    if (page > 1) {
+      emit(MoreUserLoading());
+    } else {
+      emit(UserLoading());
+    }
 
     final result = await userRepositories.getUsers(page, numContent);
 
-    if (result.isEmpty) {
+    if (page == 1 && result.isEmpty) {
       emit(UserEmpty());
+    } else if (result.isEmpty) {
+      emit(NoMoreUser());
     } else {
       if (page > 1) {
         users.addAll(result);
@@ -32,7 +38,7 @@ class UserCubit extends Cubit<UserState> {
         users.clear();
         users = result;
       }
-      emit(UserLoaded(result));
+      emit(UserLoaded());
     }
   }
 
@@ -40,6 +46,8 @@ class UserCubit extends Cubit<UserState> {
     this.username = username;
     emit(UserSelected());
   }
+
+  void nextPage() => ++page;
 
   void reset() {
     page = 1;
